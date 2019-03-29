@@ -3,7 +3,7 @@
 class UsersController < ApplicationController
   before_filter :get_tags_offset_and_filter, :only => [:index]
 
-  before_filter :only => [:create, :destroy] do |f|
+  before_filter :only => [:create, :destroy, :import_users] do |f|
     f.require_permission(['ADMIN'])
   end
   before_filter :except => [:create, :destroy] do |f|
