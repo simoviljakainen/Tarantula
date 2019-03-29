@@ -72,7 +72,7 @@ var MainContentAdmin = function() {
       return('<div id="tabs1"><div id="admin-userstab" class="tab-content"><h2>Users</h2><div id="usertoolbar"></div><div id="userform"></div></div><div id="admin-projectstab" class="tab-content"><h2>Projects</h2><div id="projecttoolbar"></div><div id="projectform"></div><div id="users-grid"></div></div></div>')
     },
     htmlContentUsers: function() {
-      return('<div id="userform"></div>');
+      return('<div id="userform"></div><div class="x-toolbar x-small-editor" style="max-height: 5px;"></div><h2 style="margin-left: 1em;">Import users from CSV</h2><p style="margin: 1em;">CSV file needs to have a header row and all the required columns.</p><div class="x-layout-panel-hd-text"><input type="button" onclick="GUI.importUsers()" value="Import users" style="background: url(&quot;/assets/tarantula/project_left.gif &quot;); border-radius: 5px; padding: 2px; color:white; font-weight: bold; border-color: #EA914F; background-size: cover; cursor: pointer;"></div>');
 
     },
     htmlContentProjects: function() {

@@ -6,6 +6,7 @@ Ext.testia.CSVImportDialog = function(config) {
     config.width = config.width || 330;
     config.height = config.height || 130;
     config.scope = config.scope || this;
+	config.title = config.title || 'Import results from CSV file';
     config.center = config.center || {autoScroll: true};
     var url = config.url;
     var cb = config.callback;
@@ -42,7 +43,7 @@ Ext.testia.CSVImportDialog = function(config) {
         name: 'file',
         cls: 'importDialogForm'
     });
-    this.setTitle('Import results from CSV file');
+    this.setTitle(config.title);
     this.center();
     this.show();
 };

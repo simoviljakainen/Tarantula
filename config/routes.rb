@@ -88,6 +88,7 @@ Tarantula::Application.routes do
 
   resources :users do
     member do
+	  put :import_users
       put :selected_project
       get :permissions
       get :available_groups

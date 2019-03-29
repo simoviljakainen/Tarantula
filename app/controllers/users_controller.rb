@@ -101,6 +101,106 @@ class UsersController < ApplicationController
     render :json => @user.id, :status => :created
   end
 
+  # PUT /users/3/import_users
+  def import_users
+    require 'json'
+    
+    login_id = -1
+    email_id = -1
+    phone_id = -1
+    password_id = -1
+    name_id = -1
+
+    delim_list = [';', ':', '\t']
+    delim = ','
+    tmpfile = 
+    
+    if !params[:file].nil?
+      filepath = params[:file].tempfile.path
+    
+      File.foreach(filepath).with_index do |line, line_id|
+
+        # Determine the csv format
+        if line_id == 0
+	
+	    delim_count = line.count(delim)
+	
+	    for d in delim_list
+	      current_count = line.count(d)
+
+	      if delim_count < current_count
+	        delim = d
+	      end
+	  
+	    end
+
+	    arr = line.chomp.downcase.split(delim)
+	    id = 0
+	
+	    for element in arr
+	      case element
+	        when "login", "username"
+	          login_id = id
+	        when "email", "mail"
+	          email_id = id
+	        when "phone", "phonenumber"
+	          phone_id = id
+	        when "password", "pass"
+	          password_id = id
+	        when "realname", "name", "fullname"
+	          name_id = id
+	      end
+	      id += 1
+	    end
+
+	    # Required elements check
+	    if login_id == -1 || email_id == -1 || name_id == -1
+	      break
+	    end
+
+	    consistent = true
+	
+	    # Check the format consistency
+	    File.foreach(filepath).with_index do |ck_line|
+	      unless ck_line.chomp.split(delim).length == arr.length
+	        consistent = false
+	        break
+	      end
+	    end
+
+	    if !consistent
+	      break
+	    end
+
+	    else
+	      usr_data = line.chomp.split(delim)
+
+	      format_line = 
+	        "{\"login\":\"#{usr_data[login_id]}\","\
+	        "\"realname\":\"#{usr_data[name_id]}\","\
+	        "\"email\":\"#{usr_data[email_id]}\","\
+	        "\"phone\":\"%s\","\
+	        "\"admin\":0,"\
+	        "\"password\":\"%s\","\
+	        "\"password_confirmation\":\"%s\"}" % 
+
+	        # Optional input
+	        [phone_id == -1 ? "" : usr_data[phone_id], 
+	        password_id == -1 ? "" : usr_data[password_id],
+	        password_id == -1 ? "" : usr_data[password_id]]
+
+	      @user = User.new(JSON.parse format_line)
+	      @user.new_random_password if @user.password.blank?
+	      @user.save!
+        end
+
+      end
+    
+    end
+    render :json => 1, :status => :created
+    
+  end
+  
   #  GET /users/:id
   #   Returns user data for :id
   def show

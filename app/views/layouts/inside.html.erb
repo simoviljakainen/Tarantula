@@ -1394,7 +1394,17 @@ Ext.extend(Ext.testia.GUI, Ext.util.Observable, {
 
       Ext.get('toolbar').dom.innerHTML = "";
     },
-
+	
+	importUsers: function () {
+		new Ext.testia.CSVImportDialog({
+			url: createUrl('/users/3/import_users'),
+			title: 'Import users from CSV',
+			callback: function() {
+				//Insert call-back to refresh the users
+				GUI.user_list.reload();
+			} 
+		});
+	},
 
     update_permissions: function() {
 
